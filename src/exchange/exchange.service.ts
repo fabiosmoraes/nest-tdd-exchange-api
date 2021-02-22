@@ -1,18 +1,28 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-
-export class CurrenciesService {
-  async getCurrency(currency: string): Promise<any> {}
-}
+import { CurrenciesService } from '../currencies/currencies.service';
+import { ExchangeDto } from './exchange.dto';
+import { ExchangeResponse } from './exchange.interface';
 
 @Injectable()
 export class ExchangeService {
   constructor(private readonly currenciesService: CurrenciesService) {}
-  async convertAmount({ from, to, amount }): Promise<any> {
+
+  async convertAmount({
+    from,
+    to,
+    amount,
+  }: ExchangeDto): Promise<ExchangeResponse> {
     if (!from || !to || !amount) {
       throw new BadRequestException();
     }
 
-    const currencyFrom = this.currenciesService.getCurrency(from);
-    const currencyTo = this.currenciesService.getCurrency(to);
+    try {
+      const currencyFrom = await this.currenciesService.getCurrency(from);
+      const currencyTo = await this.currenciesService.getCurrency(to);
+
+      return { amount: (currencyFrom.value / currencyTo.value) * amount };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
