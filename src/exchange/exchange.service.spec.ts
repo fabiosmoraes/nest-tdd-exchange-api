@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CurrenciesService } from '../currencies/currencies.service';
-import { ExchangeDto } from './exchange.dto';
+import { ExchangeDto } from './dto/exchange.dto';
 import { ExchangeService } from './exchange.service';
 
 describe('ExchangeService', () => {

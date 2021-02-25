@@ -4,8 +4,8 @@ import {
 } from '@nestjs/common';
 import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
-import { CurrenciesEntity } from './currencies.entity';
-import { CurrenciesInput } from './currencies.interface';
+import { CurrenciesEntity } from '../entities/currencies.entity';
+import { CurrenciesDto } from '../dto/currencies.dto';
 
 @EntityRepository(CurrenciesEntity)
 export class CurrenciesRepository extends Repository<CurrenciesEntity> {
@@ -20,7 +20,7 @@ export class CurrenciesRepository extends Repository<CurrenciesEntity> {
   }
 
   async createCurrency(
-    currenciesInput: CurrenciesInput,
+    currenciesInput: CurrenciesDto,
   ): Promise<CurrenciesEntity> {
     const createCurrency = new CurrenciesEntity();
 
@@ -36,7 +36,7 @@ export class CurrenciesRepository extends Repository<CurrenciesEntity> {
   }
 
   async updateCurrency(
-    currenciesInput: CurrenciesInput,
+    currenciesInput: CurrenciesDto,
   ): Promise<CurrenciesEntity> {
     const { currency, value } = currenciesInput;
     const result = await this.findOne({ currency });
@@ -55,6 +55,12 @@ export class CurrenciesRepository extends Repository<CurrenciesEntity> {
   }
 
   async deleteCurrency(currency: string): Promise<void> {
-    return;
+    const result = await this.findOne({ currency });
+
+    if (!result) {
+      throw new NotFoundException(`The currency ${currency} not found.`);
+    }
+
+    await this.delete({ currency });
   }
 }

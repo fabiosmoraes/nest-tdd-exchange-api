@@ -3,8 +3,8 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CurrenciesEntity } from './currencies.entity';
-import { CurrenciesRepository } from './currencies.repository';
+import { CurrenciesEntity } from './entities/currencies.entity';
+import { CurrenciesRepository } from './repository/currencies.repository';
 import { CurrenciesService } from './currencies.service';
 
 describe('CurrenciesService', () => {

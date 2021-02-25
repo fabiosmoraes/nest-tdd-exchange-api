@@ -7,17 +7,17 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('currencies', { synchronize: false })
+@Entity('currencies', { synchronize: true })
 export class CurrenciesEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column({ type: 'varchar', length: 3 })
   @Length(3, 3)
   @IsNotEmpty()
   currency: string;
 
-  @Column({ type: 'float', scale: 2, precision: 10 })
+  @Column({ type: 'numeric', scale: 2, precision: 10 })
   @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
